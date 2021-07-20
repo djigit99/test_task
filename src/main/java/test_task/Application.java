@@ -48,15 +48,15 @@ public class Application implements CommandLineRunner {
 
         log.info("5) Get a list of employees who do not have boss in the same department...");
         outputResult(employeeService.findAllWithoutBoss());
-
-        log.info("6) Fire Dayna Whitworth and get her ID...");
-        log.info(employeeService.fireEmployee("Dayna Whitworth").toString());
-
-        log.info("7) Change salary for Kelis Andrews and get his ID...");
-        log.info(employeeService.changeSalary("Kelis Andrews").toString());
-
-        log.info("8) Hire new employee in IT department and get his new ID...");
-        log.info(employeeService.hireEmployee(new Employee()).toString());
+//
+//        log.info("6) Fire Dayna Whitworth and get her ID...");
+//        log.info(employeeService.fireEmployee("Dayna Whitworth").toString());
+//
+//        log.info("7) Change salary for Kelis Andrews and get his ID...");
+//        log.info(employeeService.changeSalary("Kelis Andrews").toString());
+//
+//        log.info("8) Hire new employee in IT department and get his new ID...");
+//        log.info(employeeService.hireEmployee(new Employee()).toString());
 
     }
 

@@ -11,13 +11,20 @@ import java.util.List;
 public interface DepartmentDao extends CrudRepository<Department, Long> {
     //TODO Get a list of department IDS where the number of employees doesn't exceed 3 people
     @Query(
-            value = "",
+            value = "SELECT id FROM public.department AS d " +
+                    "WHERE (SELECT COUNT(*) FROM public.employee AS e WHERE d.id = e.department_id) < 4",
             nativeQuery = true)
     List<Long> findAllWhereDepartmentDoesntExceedThreePeople();
 
     //TODO Get a list of departments IDs with the maximum total salary of employees
     @Query(
-            value = "",
+            value = "SELECT emp.department_id FROM public.employee AS emp " +
+                    "GROUP BY emp.department_id " +
+                    "HAVING SUM(emp.salary) = " +
+                    "(SELECT SUM(e.salary) AS sum FROM public.employee AS e " +
+                    "GROUP BY e.department_id " +
+                    "ORDER BY sum DESC " +
+                    "LIMIT 1)",
             nativeQuery = true)
     List<Long> findAllByMaxTotalSalary();
 }
