@@ -6,7 +6,8 @@ import test_task.dao.EmployeeDao;
 import test_task.model.Employee;
 import test_task.service.EmployeeService;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -31,36 +32,53 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Long fireEmployee(String name) {
+        final List<Employee> employeesList = new ArrayList<>();
         Iterable<Employee> employees = employeeDao.findAll();
 
-        //TODO Implement method using Collection
-        // ---write your code here
+        employees.forEach(employeesList::add);
 
+        Optional<Employee> employee = employeesList.stream()
+                .filter((emp -> emp.getName().equals(name)))
+                .findFirst();
 
+        if (employee.isPresent()) {
+            final long employeeId = employee.get().getId();
+            employeesList.remove(employee.get());
+            employees = employeesList;
+            employeeDao.deleteById(employeeId);
+            employeeDao.saveAll(employees);
 
-        employeeDao.saveAll(employees);
-        return 0L;
+            return employeeId;
+        } else {
+            throw new IllegalArgumentException("Can't fire employee. Check employee's name.");
+        }
     }
 
     @Override
     public Long changeSalary(String name) {
+        final List<Employee> employeesList = new ArrayList<>();
         Iterable<Employee> employees = employeeDao.findAll();
 
-        //TODO Implement method using Collection
-        // ---write your code here
+        employees.forEach(employeesList::add);
 
+        Optional<Employee> employee = employeesList.stream()
+                .filter((emp -> emp.getName().equals(name)))
+                .findFirst();
 
+        if (employee.isPresent()) {
+            final long employeeId = employee.get().getId();
+            BigDecimal oldSalary = employee.get().getSalary();
+            employee.get().setSalary(oldSalary.add(BigDecimal.valueOf(new Random().nextDouble() * 100)));
+            employeeDao.saveAll(employees);
 
-        employeeDao.saveAll(employees);
-        return 0L;
+            return employeeId;
+        } else {
+            throw new IllegalArgumentException("Can't change employee's salary. Check employee's name.");
+        }
     }
 
     @Override
     public Long hireEmployee(Employee employee) {
-        //TODO Implement method using Collection and DAO
-        // ---write your code here
-
-
-        return 0L;
+        return employeeDao.save(employee).getId();
     }
 }
